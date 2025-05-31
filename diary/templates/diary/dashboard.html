@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Электронный дневник</h2>
+  <div class="card">
+    <div class="card-header">
+      Список предметов и классов
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead class="table-light">
+          <tr>
+            <th>Предмет</th>
+            <th>Класс</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for combo in combos %}
+          <tr>
+            <td>{{ combo.subject__name }}</td>
+            <td>{{ combo.student__student_class }}</td>
+            <td>
+              <a href="{% url 'subject_class_detail' subject_id=combo.subject__id student_class=combo.student__student_class %}" class="btn btn-sm btn-primary">Перейти</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center">Нет данных для отображения</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

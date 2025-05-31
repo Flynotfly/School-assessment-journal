@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Предмет "{{ subject.name }}" для класса "{{ student_class }}"</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Ученик</th>
+          {% for d in dates %}
+            <th>{{ d|date:"d.m.Y" }}</th>
+          {% endfor %}
+          <th>Средний балл</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.student.last_name }} {{ row.student.first_name }}</td>
+          {% for date, grade in row.grade_pairs %}
+          <td class="text-center">
+            {% if grade %}
+              <!-- Кнопка для редактирования оценки -->
+              <a href="{% url 'grade_edit' pk=grade.id %}" class="btn btn-outline-success btn-sm">{{ grade.value }}</a>
+            {% else %}
+              <!-- Прочерк; при клике - создание оценки для данного студента и даты -->
+              <a href="{% url 'grade_create_cell' subject_id=subject.id student_class=student_class student_id=row.student.id grade_date=date %}" class="btn btn-outline-secondary btn-sm">—</a>
+            {% endif %}
+          </td>
+          {% endfor %}
+          <td class="fw-bold">{{ row.average }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-3">
+    <a href="{% url 'grade_create_generic' subject_id=subject.id student_class=student_class %}" class="btn btn-success me-2">Добавить новую оценку</a>
+    <a href="{% url 'teacher-dashboard' %}" class="btn btn-secondary">Вернуться</a>
+  </div>
+</div>
+{% endblock %}
